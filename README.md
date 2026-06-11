@@ -48,29 +48,6 @@ To get a model that actually speaks English:
 
 Because it was an assignment.
 
-# Under the Hood
-
-The architecture relies on a custom binary specification that serializes weights into a flat format using Python's struct module.
-
-The Binary Format:
-
-**Header (28 bytes):** 
-Magic number (0x54494E59), followed by big-endian integers for model dimensions.
-
-**Payload:** 
-A massive block of little-endian floats representing the weights ordered sequentially from token embeddings to the final head.
-
-**The Runtime:**
-The Java runtime maps these bytes directly to memory to reconstruct the model state. The inference engine itself is a study in self-flagellation:
-
-**Manual Math:**
-Implements matmul operations on flattened 1D arrays to simulate N-dimensional tensors.
-
-**No Safety Net:**
-Handles broadcasting logic and array strides explicitly without a linear algebra library.
-
-**Custom Tokenizer:**
-Replicates Byte Pair Encoding (BPE) merge rules bit-for-bit to ensure token IDs match the Python training script perfectly.
 
 # Development Methodology
 
